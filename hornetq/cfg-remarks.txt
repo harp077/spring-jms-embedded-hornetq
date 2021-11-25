@@ -1,0 +1,28 @@
+
+https://stackoverflow.com/questions/11187030/exact-example-for-jms-topic-in-hornetq
+
+
+
+I think you are confused by the way HornetQ handles topics internaly in contrast to the way the JMS specification describes topics.
+
+Let's start with the JMS specification. Here you have one topic, where n subscribers can listen to the messages, that will be published by a client. In JMS we talk only about the destination in singular, eg. we'll send a message to the topic, or the queue respectively.
+
+HornetQ is a JMS Provider - a server that implements the JMS specification, so Java-clients can connect to it, and use the JMS-API. The JMS Provider might change, but the code should still work when using another JMS provider.
+
+However, HornetQ does not distinguish internally the destinations (topic or queue), since it tries to be a generic messaging middleware. In HornetQ all topics or queues are implemented as "addresses" and "queues". When you use the HornetQ API (CoreAPI) instead of the JMS-API, you have to deal with such things. You should read the Address section in the HornetQ documentation:
+
+    In core, there is no concept of a Topic, Topic is a JMS only term. Instead, in core, we just deal with addresses and queues.
+
+    For example, a JMS topic would be implemented by a single address to which many queues are bound. Each queue represents a subscription of the topic. A JMS Queue would be implemented as a single address to which one queue is bound - that queue represents the JMS queue.
+
+For an example how to use a topic with JMS via HornetQ, I stongly recommend the examples that come with HornetQ itself. After donwloading and extracting the hornetq archive, just go to the examples/jms/topic directory and see the readme.html for a brief overview how to implement and how to execute the example (mvn verify).
+
+=========================
+
+https://maven.repository.redhat.com/nexus/content/unzip/unzip/org/hornetq/hornetq-resources/2.1.0.BETA1/hornetq-resources-2.1.0.BETA1.jar-unzip/examples/jms/topic-hierarchies/readme.html
+
+
+   <topic name="news.europe.entertainment">
+      <entry name="/topic/news.europe.entertainment"/>
+   </topic>
+
