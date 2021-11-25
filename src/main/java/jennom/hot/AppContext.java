@@ -81,6 +81,7 @@ public class AppContext {
         ConnectionFactory jcf = (ConnectionFactory)jmsServer.lookup("JDConnectionFactory");
 	CachingConnectionFactory connectionFactory = new CachingConnectionFactory(jcf);
         connectionFactory.setExceptionListener(jmsExceptionListener);
+        System.out.println("=====\nEmbeddedJMS cfg = "+jmsServer.getHornetQServer().getConfiguration().toString());
 	return connectionFactory;        
         /*ConnectionFactory hornetCF = HornetQJMSClient.createConnectionFactoryWithoutHA(JMSFactoryType.QUEUE_CF, transportConfiguration);
         UserCredentialsConnectionFactoryAdapter userCF = new UserCredentialsConnectionFactoryAdapter();
